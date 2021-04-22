@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Crawler
 
 Crawler是对gobot的重构。
@@ -141,6 +140,3 @@ crawler.GetResult(P).ToJson()
 ```
 
 以上示例为伪代码，完整程序需自行完善
-=======
-# gobot
->>>>>>> 500cbcb2cebf657e851643102cd9d5f6c1108a38
