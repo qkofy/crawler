@@ -1,0 +1,21 @@
+{
+    "filt": "local", 
+    "hurl": "", 
+    "list": "<a href=\"(http://m.geekotg.com/[a-z]+/\\d+.html)\">",
+    "mode": "", 
+    "murl": "http://m.geekotg.com/%s/page/%d.html", 
+    "page": {
+        "description": "<meta name=\"description\" content=\"([^\"]+)\">", 
+        "imgurls": "(?sU)<div class=\"scoll-soft-pic\">\\s*<div class=\"box\">(.*)</div>", 
+        "introduce": "(?s)<div class=\"article-con  padlf yyb_app\">(.+)\\s</div>\\s</div>\\s<div class=\"part-box\">", 
+        "keywords": "<meta name=\"keywords\" content=\"([^\"]+)\">", 
+        "litpic": "<div class=\"link-img\"> <img src=\"([^\"]+)\" alt=\"[^\"]*\"></div>", 
+        "seotitle": "<title>([^|]+) [^<]*</title>", 
+        "softlinks": "<a class=\"and\" href='([^']*)' target='_blank'>[^<]*</a>", 
+        "title": "<h1 class=\"link-name\">([^<]+)</h1>", 
+        "typename": "<p>类别：([^<]*)</p>", 
+        "versionnumber": "<title>[^ ]* ([^ ]*) [^<]*</title>"
+    }, 
+    "surl": "http://m.geekotg.com/%s", 
+    "tout": "6"
+}
