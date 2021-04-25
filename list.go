@@ -18,7 +18,12 @@ func (L *List) ParseList(url string, cfg *Config) {
     if err != nil {
         L.Logs = append(L.Logs, url + str)
     } else {
-        regx := regexp.MustCompile(cfg.List)
+        if lext, ok := cfg.List["extent"]; ok && lext != "" {
+            reg := regexp.MustCompile(lext)
+            ext := reg.FindStringSubmatch(str)
+            str = ext[1]
+        }
+        regx := regexp.MustCompile(cfg.List["target"])
         urls := regx.FindAllStringSubmatch(str, -1)
         for _, u := range urls {
             if cfg.Filter(u[1]) {

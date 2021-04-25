@@ -7,13 +7,17 @@ import (
 )
 
 type Config struct {
-    Filt, Hurl, List, Mode, Murl, Surl string
-    Page map[string]string
+    Filt, Hurl, Mode, Murl, Surl string
+    List, Page map[string]string
     Tout int
 }
 
-func NewConfig(site string) *Config {
-    cfg, err := LoadJson("./config/"+site+".json")
+func NewConfig(cname string) *Config {
+    ctype := JsonFile
+    if cname[0] == '{' {
+        ctype = JsonString
+    }
+    cfg, err := LoadJson(cname, ctype)
     if cfg == nil || err != nil {
         return new(Config)
     }
@@ -22,19 +26,26 @@ func NewConfig(site string) *Config {
     tout, _ := strconv.Atoi(ParseField("tout", m))
     if ok, _ := regexp.MatchString("^http.+txt$", filt); ok {
         str, err := GetBody(filt, tout)
+        filt = str
         if err != nil {
             filt = ""
         }
-        filt = str
+    } else if filt == "local" {
+        jsn, _ := LoadFile(cname, TxtFile)
+        filt = jsn.(string)
     }
+    list := make(map[string]string)
+	for k, v := range m["list"].(map[string]interface{}) {
+		list[k] = v.(string)
+	}
     page := make(map[string]string)
-    for k, v := range m["page"].(map[string]interface{}) {
-        page[k] = v.(string)
-    }
+	for k, v := range m["page"].(map[string]interface{}) {
+		page[k] = v.(string)
+	}
     return &Config{
         Filt: filt,
         Hurl: ParseField("hurl", m),
-        List: ParseField("list", m),
+        List: list,
         Mode: ParseField("mode", m),
         Murl: ParseField("murl", m),
         Page: page,
@@ -44,7 +55,7 @@ func NewConfig(site string) *Config {
 }
 
 func (cfg *Config) Check(str string) bool {
-    if cfg.List == "" {
+    if len(cfg.List) == 0 {
         if cfg.Mode != "1" {
             if len(cfg.Page) > 0 {
                 switch str {

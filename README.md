@@ -1,6 +1,6 @@
 # Crawler
 
-Crawler是对gobot的重构。
+Crawler是对Gobot的重构。
 
 Crawler是一个轻量级网页爬虫，用于采集数据，数据采集规则使用re2正则进行匹配。
 
@@ -22,7 +22,7 @@ go get github.com/qkofy/crawler
 | :----: | :----: | :--: | :----------------------------------------------------------: |
 |  filt  | string |  否  | 目标网址过滤，过滤网址以string格式拼接，直接设为参数值，或保存于./config/配置文件名.txt，远程文件参数值设为文件网址，本地文件参数值设为local |
 |  hurl  | string |  否  |          目标首页网址，目标网址需要补全时设置该参数          |
-|  list  | string |  是  |                列表页采集规则（值为re2正则）                 |
+|  list  | array  |  是  | 列表页采集规则，规则为键值对形式出现（值为re2正则），1- 固定键名（目标规则）： target，2 - 可选键名（目标区域）：extent |
 |  mode  | number |  否  |  采集模式：1 - 采集列表，2 - 采集详情，默认 - 1、2顺序采集   |
 |  murl  | string |  是  |       （列表）有序分页网址组合规则（值为sprintf规则）        |
 |  page  | array  |  是  | 详情页采集规则，规则为键值对形式出现（值为re2正则），键名自定义 |
@@ -35,7 +35,10 @@ go get github.com/qkofy/crawler
 [
     'filt' => 'local',
     'hurl' => '',
-    'list' => '<a href="(http://www.abc.com/[a-z]+/\d+.html)">',
+    'list' => [
+    	'target' => '<a href="(http://www.abc.com/[a-z]+/\d+.html)">',
+    	'extent' => '(?s)<div class="part-box cl">(.*)<div class="page-num">',
+    ],
     'mode' => '',
     'murl' => 'http://www.abc.com/%s/page/%d.html',
     'page' => [
@@ -55,13 +58,16 @@ go get github.com/qkofy/crawler
 ]
 ```
 
-上述示例为数组格式需转换为json格式，然后保存于./config/文件名.json
+上述示例为数组格式需转换为json格式，然后保存于./config/文件名.json，或以字符串形式传入
 
 ```
 {
     "filt": "local", 
     "hurl": "", 
-    "list": "<a href=\"(http://www.abc.com/[a-z]+/\\d+.html)\">",
+    "list": {
+        "target": "<a href=\"(http://www.abc.com/[a-z]+/\\d+.html)\">", 
+        "extent": "(?s)<div class=\"part-box cl\">(.*)<div class=\"page-num\">"
+    }, 
     "mode": "", 
     "murl": "http://www.abc.com/%s/page/%d.html", 
     "page": {
@@ -92,7 +98,7 @@ go get github.com/qkofy/crawler
 |  arg3  |  int   |  是  |   0    |                 采集目列表页码                 |
 |  arg4  |  int   |  是  |   0    |                采集目标列表页数                |
 
-**2、调用函数**
+**2、调用内置函数**
 
 ```
 crawler.Run(arg1, arg2, arg3, arg4)  //返回json字符串
@@ -114,7 +120,7 @@ crawler.Run(cfg, "list", 0, 0)
 crawler.Run(cfg, "list", 2, 3)
 ```
 
-**3、调用方法**
+**3、使用内置方法**
 
 ```
 crawler.NewConfig(arg1)

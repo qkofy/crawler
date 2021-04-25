@@ -2,11 +2,18 @@ package crawler
 
 import (
     "encoding/json"
+    "errors"
     "fmt"
     "io/ioutil"
     "net/http"
     "strconv"
     "time"
+)
+
+const (
+    TxtFile    = "txt"
+    JsonFile   = "json"
+    JsonString = "string"
 )
 
 func IsNum(s string) bool {
@@ -29,12 +36,28 @@ func GetBody(url string, sec int) (string, error) {
     return string(body), err
 }
 
-func LoadJson(file string) (cfg interface{}, err error) {
-    jsn, err := ioutil.ReadFile(file)
+func LoadFile(cname, ctype string) (cfg interface{}, err error) {
+    jsn, err := ioutil.ReadFile("./config/"+cname+"."+ctype)
     if err != nil {
         return
     }
-    err = json.Unmarshal(jsn, &cfg)
+    switch ctype {
+        case JsonFile:
+            err = json.Unmarshal(jsn, &cfg)
+        case TxtFile:
+            cfg = string(jsn)
+        default:
+            err = errors.New("load error")
+    }
+    return
+}
+
+func LoadJson(cname, ctype string) (cfg interface{}, err error) {
+    if ctype == JsonString {
+        err = json.Unmarshal([]byte(cname), &cfg)
+    } else {
+        cfg, err = LoadFile(cname, ctype)
+    }
     return
 }
 

@@ -1,7 +1,10 @@
 {
     "filt": "local", 
     "hurl": "", 
-    "list": "<a href=\"(http://m.geekotg.com/[a-z]+/\\d+.html)\">",
+    "list": {
+        "target": "<a href=\"(http://m.geekotg.com/[a-z]+/\\d+.html)\">", 
+        "extent": "(?s)<div class=\"part-box cl\">(.*)<div class=\"page-num\">"
+    }, 
     "mode": "", 
     "murl": "http://m.geekotg.com/%s/page/%d.html", 
     "page": {

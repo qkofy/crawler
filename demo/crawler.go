@@ -1,4 +1,4 @@
-cd dpackage main
+package main
 
 import (
     "fmt"

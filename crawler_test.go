@@ -17,12 +17,16 @@ func TestGetBody(t *testing.T) {
     fmt.Println(GetBody("http://www.baidu.com", 3))
 }
 
+func TestLoadFile(t *testing.T) {
+    fmt.Println(LoadFile("geekotg", "json"))
+}
+
 func TestLoadJson(t *testing.T) {
-    fmt.Println(LoadJson("config/geekotg.json"))
+    fmt.Println(LoadJson("geekotg", "json"))
 }
 
 func TestParseField(t *testing.T) {
-    m, err := LoadJson("config/geekotg.json")
+    m, err := LoadJson("geekotg", "json")
     if err != nil {
         fmt.Println(err)
         return
