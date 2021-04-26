@@ -38,10 +38,10 @@ func (L *List) BatchParseList(urls []string, cfg *Config) {
     var wg sync.WaitGroup
     for _, url := range urls {
         wg.Add(1)
-        go func() {
+        go func(url string) {
             L.ParseList(url, cfg)
             wg.Done()
-        }()
+        }(url)
     }
     wg.Wait()
 }

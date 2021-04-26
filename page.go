@@ -37,10 +37,10 @@ func (P *Page) BatchParsePage(urls []string, cfg *Config) {
     var wg sync.WaitGroup
     for _, url := range urls {
         wg.Add(1)
-        go func() {
+        go func(url string) {
             P.ParsePage(url, cfg)
             wg.Done()
-        }()
+        }(url)
     }
     wg.Wait()
 }
