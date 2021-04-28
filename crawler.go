@@ -28,7 +28,9 @@ func GetBody(url string, sec int) (string, error) {
     if err != nil {
         return "request error", err
     }
-    defer resp.Body.Close()
+    defer func() {
+        _ = resp.Body.Close()
+    }()
     body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
         return "response error", err
